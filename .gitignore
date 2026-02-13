@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.DS_Store
+*.egg-info/
+dist/
+build/
+.env
+
+# Local-only files (not needed for Streamlit Cloud deployment)
+compile_data.py
+corruption_app.py
+data_compiled_segments.csv
