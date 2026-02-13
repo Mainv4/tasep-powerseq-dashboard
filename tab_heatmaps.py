@@ -133,7 +133,8 @@ def render(df_physics):
                 with fig_cols[i % 2]:
                     st.markdown(f"**{fig_info['name']}**")
                     try:
-                        st.image(str(fig_info['path']), use_container_width=True)
+                        image_bytes = fig_info['path'].read_bytes()
+                        st.image(image_bytes, use_container_width=True)
                     except Exception:
                         st.warning(f"Could not load: {fig_info['filename']}")
                     st.caption(fig_info['filename'])
