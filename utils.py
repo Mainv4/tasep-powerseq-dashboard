@@ -201,11 +201,11 @@ def find_simulation_figures(sim_name, base_path):
 
     # Define figure locations and their display names
     figure_locations = [
-        ('FIGURES/RG', f'DATA_RG_{base_pattern_no_pol}_pol_*_rg.png', 'Radius of Gyration (Linear)', ['_log.png']),
-        ('FIGURES/RG', f'DATA_RG_{base_pattern_no_pol}_pol_*_rg_log.png', 'Radius of Gyration (Log)', []),
-        ('FIGURES_PROV/chain_segments', f'{base_pattern}*_chain_segments.png', 'Chain Segments', []),
-        ('FIGURES_PROV/COM', f'{base_pattern}*_msd.png.png', 'MSD (COM)', []),
-        ('FIGURES_PROV/target_monomer', f'{base_pattern}*_msd.png.png', 'MSD (Target Monomer)', []),
+        ('RG', f'DATA_RG_{base_pattern_no_pol}_pol_*_rg.png', 'Radius of Gyration (Linear)', ['_log.png']),
+        ('RG', f'DATA_RG_{base_pattern_no_pol}_pol_*_rg_log.png', 'Radius of Gyration (Log)', []),
+        ('chain_segments', f'{base_pattern}*_chain_segments.png', 'Chain Segments', []),
+        ('COM', f'{base_pattern}*_msd.png.png', 'MSD (COM)', []),
+        ('target_monomer', f'{base_pattern}*_msd.png.png', 'MSD (Target Monomer)', []),
     ]
 
     for dir_path, pattern, display_name, exclude_patterns in figure_locations:
@@ -229,7 +229,7 @@ def display_simulation_figures(sim_data):
     st.markdown("---")
     st.markdown("#### Analysis Figures")
 
-    base_path = Path(__file__).parent.parent
+    base_path = Path(__file__).parent / 'static'
     sim_name = sim_data['simulation_dir']
 
     figures = find_simulation_figures(sim_name, base_path)
@@ -347,69 +347,6 @@ def display_simulation_details(df, alpha_in_selected, alpha_out_selected):
 
     # Display associated figures
     display_simulation_figures(sim_data)
-
-    # Dry-run analysis for continue_from_dump
-    st.markdown("---")
-    st.markdown("#### Continue From Dump Preview")
-    st.markdown("This section shows how `--continue_from_dump` would handle this simulation.")
-
-    valid_ts = sim_data.get('valid_timestep', 0)
-    last_ts = sim_data.get('last_timestep', 0)
-
-    if valid_ts and last_ts:
-        st.markdown("**Recovery Analysis:**")
-
-        if last_ts > valid_ts:
-            timesteps_lost = last_ts - valid_ts
-            st.warning(f"""
-            **Mismatch detected**: dump has {timesteps_lost:,} timesteps beyond angles.dat
-
-            - Dump last timestep: **{last_ts:,}** ({last_ts/1e6:.1f}M)
-            - Angles last timestep: **{valid_ts:,}** ({valid_ts/1e6:.1f}M)
-
-            `continue_from_dump` would:
-            1. Search dump.lammpstrj for frame at timestep {valid_ts:,}
-            2. Synchronize to this timestep
-            3. Continue simulation from this point
-            """)
-
-            # Target timesteps input
-            target_ts = st.number_input(
-                "Target timesteps (millions)",
-                min_value=float(valid_ts / 1e6),
-                max_value=1000.0,
-                value=float(last_ts / 1e6 + 10),
-                step=10.0,
-                help="Enter the target number of timesteps in millions",
-                key="corrupt_target_ts"
-            )
-
-            target_ts_actual = int(target_ts * 1e6)
-            steps_to_run = target_ts_actual - valid_ts
-
-            st.info(f"""
-            **Dry-run command:**
-            ```bash
-            python3 src/main.py --sampling powerseq --continue_from_dump \\
-                --Pe {sim_data.get('Pe', 10.0)} \\
-                --alpha_in {sim_data.get('alpha_in', 0.5)} \\
-                --alpha_out {sim_data.get('alpha_out', 0.5)} \\
-                --kappa {sim_data.get('kappa', 1.0)} \\
-                --total_md_steps {target_ts_actual} \\
-                --tasep_time_unit 10000 --seed 1234 --pol 1 \\
-                --output_dir {sim_data['simulation_dir']}
-            ```
-
-            This would run **{steps_to_run:,}** additional timesteps ({steps_to_run/1e6:.1f}M)
-            """)
-        else:
-            st.success(f"""
-            **No mismatch**: dump and angles.dat are synchronized at {valid_ts:,} ({valid_ts/1e6:.1f}M)
-
-            `continue_from_dump` would simply continue from the last timestep.
-            """)
-    else:
-        st.info("Timestep information not available for dry-run analysis.")
 
 
 def calc_marker_size(data_df, size_col, ref_df):

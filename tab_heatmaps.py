@@ -119,7 +119,7 @@ def render(df_physics):
                 cols[i % len(cols)].metric(display_name, f"{sim_data[col_name]:.4f}")
 
         # Display figures
-        base_path = Path(__file__).parent.parent
+        base_path = Path(__file__).parent / 'static'
         sim_name = (f"Pe_{sim_data['Pe']}_alpha_in_{alpha_in_sel}"
                     f"_alpha_out_{alpha_out_sel}_kappa_{sim_data['kappa']}"
                     f"_pol_{sim_data['pol']}")
