@@ -80,7 +80,7 @@ def render(df_physics):
         else:
             title = available_metrics[observable] + title_suffix
             fig = create_heatmap(heatmap_df, observable, title, colorscale)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
             # Statistics row
             col_s1, col_s2, col_s3, col_s4 = st.columns(4)
@@ -134,7 +134,7 @@ def render(df_physics):
                     st.markdown(f"**{fig_info['name']}**")
                     try:
                         image_bytes = fig_info['path'].read_bytes()
-                        st.image(image_bytes, use_container_width=True)
+                        st.image(image_bytes, width="stretch")
                     except Exception:
                         st.warning(f"Could not load: {fig_info['filename']}")
                     st.caption(fig_info['filename'])

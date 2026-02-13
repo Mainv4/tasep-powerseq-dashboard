@@ -249,7 +249,7 @@ def display_simulation_figures(sim_data):
             st.markdown(f"**{fig_info['name']}**")
             try:
                 image_bytes = fig_info['path'].read_bytes()
-                st.image(image_bytes, use_container_width=True)
+                st.image(image_bytes, width="stretch")
             except Exception:
                 st.warning(f"Could not load: {fig_info['filename']}")
             st.caption(fig_info['filename'])
@@ -311,7 +311,7 @@ def display_simulation_details(df, alpha_in_selected, alpha_out_selected):
                    unsafe_allow_html=True)
     else:
         fig_timeline = create_block_timeline(sim_data, eliminated_blocks)
-        st.plotly_chart(fig_timeline, use_container_width=True)
+        st.plotly_chart(fig_timeline, width="stretch")
 
         # Display eliminated blocks details
         st.markdown("#### Eliminated Blocks")

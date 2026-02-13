@@ -45,7 +45,7 @@ def render(df_corruption):
     st.markdown("### Heatmap: Corruption in Parameter Space")
     colorscale = 'RdYlGn_r' if 'lost' in selected_metric or 'eliminated' in selected_metric else 'Viridis'
     fig_heatmap = create_heatmap(df_corruption, selected_metric, CORRUPTION_METRICS[selected_metric], colorscale)
-    st.plotly_chart(fig_heatmap, use_container_width=True)
+    st.plotly_chart(fig_heatmap, width="stretch")
 
     # Simulation selector
     st.markdown("### Select a Simulation for Details")
@@ -82,7 +82,7 @@ def render(df_corruption):
             color_discrete_sequence=['#1f77b4']
         )
         fig_hist.update_layout(height=400)
-        st.plotly_chart(fig_hist, use_container_width=True)
+        st.plotly_chart(fig_hist, width="stretch")
     with col2:
         fig_scatter = px.scatter(
             df_corruption,
@@ -99,4 +99,4 @@ def render(df_corruption):
             }
         )
         fig_scatter.update_layout(height=400)
-        st.plotly_chart(fig_scatter, use_container_width=True)
+        st.plotly_chart(fig_scatter, width="stretch")

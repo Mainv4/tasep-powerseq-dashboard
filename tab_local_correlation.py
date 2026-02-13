@@ -305,7 +305,7 @@ def render():
             margin=dict(r=120, b=100),
         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     else:
         # Separate figures mode
@@ -419,7 +419,7 @@ def render():
             margin=dict(r=100),
         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     # Statistics
     st.metric("Data points", len(plot_df))
