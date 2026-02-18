@@ -4,8 +4,6 @@ Corruption analysis tab for the Active Polymer Dashboard.
 """
 
 import streamlit as st
-import plotly.express as px
-
 from utils import create_heatmap, display_simulation_details, calculate_statistics
 from constants import CORRUPTION_METRICS
 
@@ -67,36 +65,3 @@ def render(df_corruption):
 
     # Simulation details
     display_simulation_details(df_corruption, alpha_in_selected, alpha_out_selected)
-
-    # Distribution analysis
-    st.markdown("---")
-    st.markdown("### Distribution Analysis")
-    col1, col2 = st.columns(2)
-    with col1:
-        fig_hist = px.histogram(
-            df_corruption,
-            x='blocks_lost_pct',
-            nbins=20,
-            title='Distribution of Blocks Lost (%)',
-            labels={'blocks_lost_pct': 'Blocks Lost (%)'},
-            color_discrete_sequence=['#1f77b4']
-        )
-        fig_hist.update_layout(height=400)
-        st.plotly_chart(fig_hist, width="stretch")
-    with col2:
-        fig_scatter = px.scatter(
-            df_corruption,
-            x='blocks_original',
-            y='blocks_lost_pct',
-            color='alpha_in',
-            size='blocks_eliminated',
-            hover_data=['simulation_dir', 'alpha_in', 'alpha_out'],
-            title='Corruption vs Simulation Length',
-            labels={
-                'blocks_original': 'Original Blocks',
-                'blocks_lost_pct': 'Blocks Lost (%)',
-                'alpha_in': 'α_in'
-            }
-        )
-        fig_scatter.update_layout(height=400)
-        st.plotly_chart(fig_scatter, width="stretch")

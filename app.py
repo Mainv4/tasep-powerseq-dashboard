@@ -79,6 +79,3 @@ with tab_global:
 with tab_local:
     tab_local_correlation.render()
 
-# Footer
-st.markdown("---")
-st.markdown("**Active Polymer Dashboard** | Data compiled from TASEP, E2E, Rg, and MSD analyses")

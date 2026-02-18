@@ -186,12 +186,19 @@ def render(df_physics):
 
     fig = px.scatter(**scatter_kwargs)
 
-    fig.update_traces(marker=dict(line=dict(width=0.5, color='white')))
+    # Marker styling: big markers when no size variable, with clean outline
+    if size_var == 'None':
+        fig.update_traces(marker=dict(size=12, line=dict(width=0.8, color='white')))
+    else:
+        fig.update_traces(marker=dict(line=dict(width=0.8, color='white')))
+
     fig.update_layout(
-        font=dict(size=12),
+        font=dict(size=13),
         template='plotly_white',
         legend=dict(orientation="h", yanchor="top", y=-0.12, xanchor="center", x=0.5),
         margin=dict(r=120, b=100),
+        xaxis=dict(gridcolor='#eee', gridwidth=1),
+        yaxis=dict(gridcolor='#eee', gridwidth=1),
     )
 
     st.plotly_chart(fig, width="stretch")
